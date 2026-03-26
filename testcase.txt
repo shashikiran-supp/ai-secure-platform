@@ -1,0 +1,4 @@
+email=admin@company.com
+password=admin123
+api_key=sk-test-xyz
+Exception: NullPointerException

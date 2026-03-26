@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Secure Platform</title>
+    <style>
+        body { font-family: Arial; background:#f5f7fa; padding:20px;}
+        .card { background:white; padding:20px; border-radius:10px;}
+        .risk { color:red; }
+        .safe { color:green; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+<h2>🔐 AI Secure Data Intelligence Platform</h2>
+
+<input type="file" id="file"><br><br>
+<button onclick="upload()">Analyze</button>
+
+<div id="output"></div>
+</div>
+
+<script>
+async function upload() {
+    const file = document.getElementById("file").files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch("/analyze", {
+        method: "POST",
+        body: formData
+    });
+
+    const data = await res.json();
+
+    let html = `<h3>Risk Score: ${data.risk_score} (${data.risk_level})</h3>`;
+
+    html += "<h4>Insights:</h4><ul>";
+    data.insights.forEach(i => html += `<li>${i}</li>`);
+    html += "</ul><h4>Logs:</h4>";
+
+    data.logs.forEach(l => {
+        html += `<p class="${l.risky ? 'risk' : 'safe'}">
+        Line ${l.line}: ${l.content}</p>`;
+    });
+
+    document.getElementById("output").innerHTML = html;
+}
+</script>
+
+</body>
+</html>
